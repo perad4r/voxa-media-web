@@ -32,7 +32,7 @@ jobs:
 
       - name: Back up production data
         working-directory: ${{ env.DEPLOY_DIR }}
-        run: CONTAINER_CLI=docker ./scripts/backup.sh
+        run: CONTAINER_CLI=docker sh ./scripts/backup.sh
 
       - name: Sync the live checkout
         working-directory: ${{ env.DEPLOY_DIR }}
