@@ -40,6 +40,17 @@ docker compose ps
 
 Restarting the router after an app recreation refreshes Nginx's resolved WordPress container address. For theme-only edits, the source files are bind-mounted read-only into the app, so a WordPress restart plus router restart is enough. Do not run `docker compose down -v` during deployment.
 
+## Automated deployment
+
+The `main` branch triggers `.github/workflows/deploy.yml` on the project-specific self-hosted runner. The workflow:
+
+1. Verifies that the live directory is the expected Git checkout and that its private `.env` exists.
+2. Creates the database and uploads/plugins backups with `scripts/backup.sh`.
+3. Fast-forwards `/home/mlemingcapoo/Projects/voxa-media-web` to `origin/main` without cleaning ignored runtime files.
+4. Pulls images, updates the database/WordPress/router services, and restarts the router.
+
+The runner is installed under `/home/mlemingcapoo/voxa-media-actions-runner` and managed as the `mlemingcapoo` user service `voxa-media-actions-runner.service`. Keep `.env`, Docker volumes, backups, and uploads outside Git.
+
 ## Back up and restore
 
 Run `CONTAINER_CLI=docker ./scripts/backup.sh` from the project directory. It creates a MariaDB transaction-consistent dump and a separate archive of WordPress plugins and uploads under `./backups/`, with restrictive permissions. Store copies away from the server and test restores periodically. The theme and configuration are in the project files; the private `.env` must be backed up separately in a secure secret store.

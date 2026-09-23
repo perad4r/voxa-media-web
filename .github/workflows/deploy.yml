@@ -1,0 +1,50 @@
+name: Deploy VOXA Media
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voxa-media-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    env:
+      DEPLOY_DIR: /home/mlemingcapoo/Projects/voxa-media-web
+
+    steps:
+      - name: Check out the deployment source
+        uses: actions/checkout@v4
+
+      - name: Verify the live checkout
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          test -f .env
+          test -d .git
+          test "$(git remote get-url origin)" = "https://github.com/perad4r/voxa-media-web.git"
+
+      - name: Back up production data
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: CONTAINER_CLI=docker ./scripts/backup.sh
+
+      - name: Sync the live checkout
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          git fetch --prune origin main
+          git checkout -B main origin/main
+          git reset --hard origin/main
+
+      - name: Update production services
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          docker compose pull
+          docker compose up -d database wordpress router
+          docker compose restart router
+          docker compose ps
