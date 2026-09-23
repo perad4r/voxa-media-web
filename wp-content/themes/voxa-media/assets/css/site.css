@@ -30,6 +30,7 @@ button, input, select, textarea { font: inherit; }
 .skip-link { position: fixed; z-index: 20; top: 8px; left: 8px; padding: 10px 14px; transform: translateY(-150%); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; }
 .skip-link:focus { transform: translateY(0); }
 
+.site-header, .site-footer { width: 100%; max-width: none; margin-inline: 0; }
 .site-header { position: relative; z-index: 3; border-bottom: 1px solid var(--line); background: var(--page); }
 .site-header__inner { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
 .brand { width: 146px; flex: 0 0 auto; }
