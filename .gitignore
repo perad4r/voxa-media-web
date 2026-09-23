@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+!.env.local.example
+.packages/
+wordpress-data/
+database-data/
+*.sql
+*.sql.gz
+*.tar.gz
+.DS_Store

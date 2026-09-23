@@ -1,0 +1,18 @@
+# WordPress Multisite rewrite rules (subdomain network with mapped domains).
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+
+# Keep the trailing slash on the administration directory.
+RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+
+# Serve existing files and directories directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Preserve WordPress core paths and route everything else through WordPress.
+RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
+RewriteRule ^(.*\.php)$ $1 [L]
+RewriteRule . index.php [L]

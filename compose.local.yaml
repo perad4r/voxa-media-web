@@ -1,0 +1,11 @@
+services:
+  router:
+    volumes:
+      - ./docker/nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "127.0.0.1:8080:80"
+
+networks:
+  edge:
+    name: ${EDGE_NETWORK_NAME:-voxa-media-local-edge}
+    external: false

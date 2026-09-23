@@ -1,0 +1,138 @@
+name: ${COMPOSE_PROJECT_NAME:-voxa-media}
+
+x-wordpress-config-extra: &wordpress-config-extra |
+  define('WP_ALLOW_MULTISITE', true);
+  define('MULTISITE', true);
+  define('SUBDOMAIN_INSTALL', true);
+  $$voxaNetworkDomain = getenv('WP_NETWORK_DOMAIN');
+  $$voxaUrlPort = getenv('WP_URL_PORT');
+  $$voxaNetworkHost = $$voxaNetworkDomain . ($$voxaUrlPort ? ':' . $$voxaUrlPort : '');
+  define('DOMAIN_CURRENT_SITE', $$voxaNetworkHost);
+  define('PATH_CURRENT_SITE', '/');
+  define('SITE_ID_CURRENT_SITE', 1);
+  define('BLOG_ID_CURRENT_SITE', 1);
+  define('WP_ALLOW_SIGNUP', false);
+  define('ALLOW_UNFILTERED_UPLOADS', false);
+  define('DISALLOW_FILE_EDIT', true);
+  if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    $$voxaForwardedProto = strtolower(trim(explode(',', $$_SERVER['HTTP_X_FORWARDED_PROTO'])[0]));
+    if ($$voxaForwardedProto === 'https') { $$_SERVER['HTTPS'] = 'on'; }
+  }
+  $$voxaCookieDomainCheck = preg_replace('/:\\d+$/', '', $$voxaNetworkHost);
+  if (preg_match('/(^|\\.)voxa\\.vn$/', $$voxaCookieDomainCheck)) {
+    define('COOKIE_DOMAIN', '.voxa.vn');
+  } elseif (preg_match('/(^|\\.)voxa\\.localhost$/', $$voxaCookieDomainCheck)) {
+    define('COOKIE_DOMAIN', '.voxa.localhost');
+  }
+  define('FORCE_SSL_ADMIN', getenv('WP_SCHEME') === 'https');
+
+services:
+  database:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:?Set DB_NAME in .env}
+      MARIADB_USER: ${DB_USER:?Set DB_USER in .env}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD in .env}
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - database
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  wordpress:
+    image: wordpress:7.1.2-php8.3-apache
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DB_NAME:?Set DB_NAME in .env}
+      WORDPRESS_DB_USER: ${DB_USER:?Set DB_USER in .env}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      WP_NETWORK_DOMAIN: ${WP_NETWORK_DOMAIN:?Set WP_NETWORK_DOMAIN in .env}
+      WP_FORUM_DOMAIN: ${WP_FORUM_DOMAIN:?Set WP_FORUM_DOMAIN in .env}
+      WP_SCHEME: ${WP_SCHEME:-https}
+      WP_URL_PORT: ${WP_URL_PORT:-}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:?Set WP_ADMIN_USER in .env}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?Set WP_ADMIN_PASSWORD in .env}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:?Set WP_ADMIN_EMAIL in .env}
+      WORDPRESS_CONFIG_EXTRA: *wordpress-config-extra
+    volumes:
+      - wordpress:/var/www/html
+      - ./docker/wordpress/.htaccess:/var/www/html/.htaccess:ro
+      - ./wp-content/themes/voxa-media:/var/www/html/wp-content/themes/voxa-media:ro
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+    expose:
+      - "80"
+    networks:
+      - media
+      - database
+
+  wp-cli:
+    image: wordpress:cli-php8.3
+    user: "33:33"
+    profiles: ["tools"]
+    depends_on:
+      database:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${DB_NAME:?Set DB_NAME in .env}
+      WORDPRESS_DB_USER: ${DB_USER:?Set DB_USER in .env}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      WORDPRESS_CONFIG_EXTRA: *wordpress-config-extra
+      WP_CLI_CACHE_DIR: /tmp/wp-cli/cache
+      WP_NETWORK_DOMAIN: ${WP_NETWORK_DOMAIN:?Set WP_NETWORK_DOMAIN in .env}
+      WP_FORUM_DOMAIN: ${WP_FORUM_DOMAIN:?Set WP_FORUM_DOMAIN in .env}
+      WP_SCHEME: ${WP_SCHEME:-https}
+      WP_URL_PORT: ${WP_URL_PORT:-}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:?Set WP_ADMIN_USER in .env}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?Set WP_ADMIN_PASSWORD in .env}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:?Set WP_ADMIN_EMAIL in .env}
+    volumes:
+      - wordpress:/var/www/html
+      - ./wp-content/themes/voxa-media:/var/www/html/wp-content/themes/voxa-media:ro
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./scripts:/scripts:ro
+      - ./.packages:/packages:ro
+    networks:
+      - media
+      - database
+
+  router:
+    image: nginx:1.29-alpine
+    container_name: voxa-media-router
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    expose:
+      - "4345"
+      - "4346"
+    networks:
+      - media
+      - edge
+
+volumes:
+  database:
+  wordpress:
+
+networks:
+  media:
+    driver: bridge
+  database:
+    internal: true
+  edge:
+    name: ${EDGE_NETWORK_NAME:-voxa-website-internal}
+    external: true
