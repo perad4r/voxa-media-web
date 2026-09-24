@@ -536,7 +536,7 @@ body.voxa-forum .site-header__inner { height: 64px; min-height: 64px; padding-bl
 .voxa-forum .forum-content .bbp-search-form { display: none; }
 .voxa-forum .forum-content .bbp-forums, .voxa-forum .forum-content .bbp-topics, .voxa-forum .forum-content .bbp-replies { display: block; width: 100%; margin: 0; overflow: hidden; border: 1px solid var(--forum-line); border-radius: 0; border-spacing: 0; background: var(--forum-panel); }
 .voxa-forum .forum-content .bbp-header, .voxa-forum .forum-content .bbp-footer { display: block; margin: 0; background: var(--forum-raised); color: var(--forum-muted); font-family: "JetBrains Mono", monospace; font-size: .59rem; letter-spacing: .08em; text-transform: uppercase; }
-body.voxa-forum #bbpress-forums ul.bbp-forums, body.voxa-forum #bbpress-forums ul.bbp-topics, body.voxa-forum #bbpress-forums ul.bbp-replies { background: var(--forum-panel); }
+body.voxa-forum #bbpress-forums ul.bbp-forums, body.voxa-forum #bbpress-forums ul.bbp-topics, body.voxa-forum #bbpress-forums ul.bbp-replies { border-color: var(--forum-line); background: var(--forum-panel); }
 body.voxa-forum #bbpress-forums li.bbp-header, body.voxa-forum #bbpress-forums li.bbp-footer { border-color: var(--forum-line); background: var(--forum-raised); }
 body.voxa-forum #bbpress-forums li.bbp-header { color: var(--forum-muted); }
 body.voxa-forum #bbpress-forums ul.odd, body.voxa-forum #bbpress-forums ul.even, body.voxa-forum #bbpress-forums li.bbp-body ul.forum, body.voxa-forum #bbpress-forums li.bbp-body ul.topic { border-color: var(--forum-line); background: var(--forum-panel); }
