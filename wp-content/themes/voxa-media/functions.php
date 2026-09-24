@@ -15,8 +15,43 @@ add_action('after_setup_theme', 'voxa_media_setup');
 function voxa_media_enqueue_styles() {
 	$css_path = get_stylesheet_directory() . '/assets/css/site.css';
 	wp_enqueue_style('voxa-media-style', get_stylesheet_directory_uri() . '/assets/css/site.css', [], file_exists($css_path) ? (string) filemtime($css_path) : '1.0.0');
+	if (is_main_site()) {
+		wp_enqueue_style(
+			'voxa-editorial-fonts',
+			'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap',
+			[],
+			null
+		);
+	}
+	if (voxa_media_design_preview_enabled()) {
+		$script_path = get_stylesheet_directory() . '/assets/js/blog-design-preview.js';
+		wp_enqueue_script(
+			'voxa-blog-design-preview',
+			get_stylesheet_directory_uri() . '/assets/js/blog-design-preview.js',
+			[],
+			file_exists($script_path) ? (string) filemtime($script_path) : '1.0.0',
+			true
+		);
+	}
 }
 add_action('wp_enqueue_scripts', 'voxa_media_enqueue_styles');
+
+function voxa_media_body_classes($classes) {
+	if (is_main_site()) {
+		$classes[] = 'voxa-blog';
+	}
+	return $classes;
+}
+add_filter('body_class', 'voxa_media_body_classes');
+
+function voxa_media_design_preview_enabled() {
+	return is_main_site()
+		&& is_front_page()
+		&& getenv('VOXA_DESIGN_PREVIEW') === '1'
+		&& isset($_GET['voxa_design_preview'])
+		&& is_string($_GET['voxa_design_preview'])
+		&& sanitize_text_field(wp_unslash($_GET['voxa_design_preview'])) === '1';
+}
 
 function voxa_media_logo_url($filename) {
 	return get_stylesheet_directory_uri() . '/assets/' . rawurlencode($filename);
@@ -41,9 +76,11 @@ function voxa_media_archive_canonical() {
 add_action('wp_head', 'voxa_media_archive_canonical', 1);
 
 function voxa_media_noindex_internal_results($robots) {
-	if (is_search() || is_404()) {
+	if (is_search() || is_404() || voxa_media_design_preview_enabled()) {
 		$robots['noindex'] = true;
 	}
 	return $robots;
 }
 add_filter('wp_robots', 'voxa_media_noindex_internal_results');
+
+require_once get_stylesheet_directory() . '/inc/design-preview.php';

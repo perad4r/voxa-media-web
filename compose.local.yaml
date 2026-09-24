@@ -1,4 +1,8 @@
 services:
+  wordpress:
+    environment:
+      VOXA_DESIGN_PREVIEW: "1"
+
   router:
     volumes:
       - ./docker/nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro

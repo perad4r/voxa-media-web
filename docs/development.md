@@ -15,6 +15,8 @@ podman compose --env-file .env.local -f compose.yaml -f compose.local.yaml run -
 
 Open [http://blog.voxa.localhost:8080](http://blog.voxa.localhost:8080) and [http://forum.voxa.localhost:8080](http://forum.voxa.localhost:8080). The admin URLs are `/wp-admin/` on either hostname. Local bootstrap credentials are the values in `.env.local`.
 
+The blog’s editorial mock-data preview is enabled only by the local Compose override and the explicit URL `http://blog.voxa.localhost:8080/?voxa_design_preview=1`. Without the query flag, the blog uses the local WordPress database as usual; production Compose does not enable the preview flag.
+
 The local tunnel-facing router ports 4345 and 4346 are not mapped to the Mac. Only the loopback proxy on port 8080 is reachable from the host. If port 8080 is already in use, change the local override to another available high loopback port and open each `.localhost:<port>` URL instead. The one-time bootstrap uses the pinned official Twenty Twenty-One 2.9 and bbPress 2.6.18 packages in `.packages/` when present; otherwise WP-CLI downloads them from WordPress.org.
 
 ## Useful commands
