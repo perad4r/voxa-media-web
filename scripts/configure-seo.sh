@@ -39,3 +39,8 @@ check_conflicts "$BASE_URL"
 check_conflicts "$FORUM_URL"
 install_or_verify_yoast "$BASE_URL"
 install_or_verify_yoast "$FORUM_URL"
+
+# Yoast owns /sitemap_index.xml. Refresh the database rewrite rules after activation
+# without attempting to modify the read-only production .htaccess mount.
+wp --url="$BASE_URL" rewrite flush
+wp --url="$FORUM_URL" rewrite flush
