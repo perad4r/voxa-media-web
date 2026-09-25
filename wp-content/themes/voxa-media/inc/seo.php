@@ -47,3 +47,13 @@ function voxa_media_seo_description($description) {
 	return wp_strip_all_tags(get_bloginfo('description'));
 }
 add_filter('wpseo_metadesc', 'voxa_media_seo_description', 10);
+
+function voxa_media_seo_social_description($description) {
+	if ($description !== '') {
+		return $description;
+	}
+
+	return voxa_media_seo_description('');
+}
+add_filter('wpseo_opengraph_desc', 'voxa_media_seo_social_description', 10);
+add_filter('wpseo_twitter_description', 'voxa_media_seo_social_description', 10);
