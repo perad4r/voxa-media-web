@@ -1,23 +1,4 @@
 :root {
-  color-scheme: dark;
-  --voxa-blue: #65aaff;
-  --voxa-blue-action: #145eb9;
-  --voxa-blue-soft: rgba(30, 125, 255, .16);
-  --page: #080d16;
-  --surface: #0e1624;
-  --surface-muted: #141f30;
-  --ink: #edf3fc;
-  --muted: #a5b4c8;
-  --line: #263650;
-  --shadow: 0 24px 64px rgba(0, 0, 0, .28);
-  --width: 1160px;
-  --reading-width: 760px;
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
-
-html[data-voxa-theme="light"] {
   color-scheme: light;
   --voxa-blue: #075985;
   --voxa-blue-action: #126be7;
@@ -29,10 +10,29 @@ html[data-voxa-theme="light"] {
   --muted: #526173;
   --line: #d5dfeb;
   --shadow: 0 24px 64px rgba(15, 35, 58, .1);
+  --width: 1160px;
+  --reading-width: 760px;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+html[data-voxa-theme="dark"] {
+  color-scheme: dark;
+  --voxa-blue: #65aaff;
+  --voxa-blue-action: #145eb9;
+  --voxa-blue-soft: rgba(30, 125, 255, .16);
+  --page: #080d16;
+  --surface: #0e1624;
+  --surface-muted: #141f30;
+  --ink: #edf3fc;
+  --muted: #a5b4c8;
+  --line: #263650;
+  --shadow: 0 24px 64px rgba(0, 0, 0, .28);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; background: var(--page); color-scheme: dark; }
+html { scroll-behavior: smooth; background: var(--page); color-scheme: light; }
 body, #page, .site, .site-main, #content, .entry-content, .wp-site-blocks { background-color: var(--page); color: var(--ink); }
 body { margin: 0; font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration-thickness: .08em; text-underline-offset: .18em; }
@@ -50,10 +50,10 @@ html body { background-color: var(--page); }
 .site-header__inner { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
 .brand { width: 146px; flex: 0 0 auto; }
 .brand__logo { width: 100%; max-height: 56px; object-fit: contain; object-position: left center; }
-.brand__logo--light { display: none; }
-.brand__logo--dark { display: block; }
-html[data-voxa-theme="light"] .brand__logo--light { display: block; }
-html[data-voxa-theme="light"] .brand__logo--dark { display: none; }
+.brand__logo--light { display: block; }
+.brand__logo--dark { display: none; }
+html[data-voxa-theme="dark"] .brand__logo--light { display: none; }
+html[data-voxa-theme="dark"] .brand__logo--dark { display: block; }
 .primary-nav { display: flex; align-items: center; justify-content: flex-end; gap: clamp(18px, 3vw, 38px); }
 .primary-nav__link, .primary-nav__account { color: var(--muted); font-size: .94rem; font-weight: 550; text-decoration: none; }
 .primary-nav__link:hover, .primary-nav__link.is-current { color: var(--ink); }
@@ -255,21 +255,6 @@ html[data-voxa-theme] body, html[data-voxa-theme] .site-header, html[data-voxa-t
 
 /* Editorial blog treatment. The forum and shared masthead remain on the existing theme styles. */
 body.voxa-blog {
-  --blog-bg: #0e0d15;
-  --blog-panel: #15151e;
-  --blog-raised: #1b1b23;
-  --blog-line: rgba(255, 255, 255, .09);
-  --blog-line-strong: rgba(255, 255, 255, .16);
-  --blog-ink: #fff;
-  --blog-copy: rgba(255, 255, 255, .68);
-  --blog-muted: rgba(255, 255, 255, .42);
-  --blog-electric: #126be7;
-  --blog-cyan: #38bdf8;
-  background: var(--blog-bg);
-  color: var(--blog-ink);
-  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-html[data-voxa-theme="light"] body.voxa-blog {
   --blog-bg: #f7f9fc;
   --blog-panel: #ffffff;
   --blog-raised: #eef3f8;
@@ -278,7 +263,22 @@ html[data-voxa-theme="light"] body.voxa-blog {
   --blog-ink: #102033;
   --blog-copy: #455468;
   --blog-muted: #65758a;
+  --blog-electric: #126be7;
   --blog-cyan: #075985;
+  background: var(--blog-bg);
+  color: var(--blog-ink);
+  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+html[data-voxa-theme="dark"] body.voxa-blog {
+  --blog-bg: #0e0d15;
+  --blog-panel: #15151e;
+  --blog-raised: #1b1b23;
+  --blog-line: rgba(255, 255, 255, .09);
+  --blog-line-strong: rgba(255, 255, 255, .16);
+  --blog-ink: #fff;
+  --blog-copy: rgba(255, 255, 255, .68);
+  --blog-muted: rgba(255, 255, 255, .42);
+  --blog-cyan: #38bdf8;
 }
 body.voxa-blog .site-header, body.voxa-blog .site-footer { background: var(--blog-bg); border-color: var(--blog-line); }
 body.voxa-blog .site-header__inner, body.voxa-blog .site-footer__inner { width: min(calc(100% - 96px), 1240px); }
@@ -325,28 +325,6 @@ body.voxa-blog .site-header__inner {
   padding-block: 0;
 }
 .voxa-blog .site-main {
-  --editorial-page: #0e0d15;
-  --editorial-surface: #15151e;
-  --editorial-surface-raised: #1f1f27;
-  --editorial-line: rgba(255, 255, 255, .1);
-  --editorial-line-hover: rgba(255, 255, 255, .25);
-  --editorial-ink: #fff;
-  --editorial-secondary: rgba(255, 255, 255, .68);
-  --editorial-muted: rgba(255, 255, 255, .46);
-  --editorial-electric: #126be7;
-  --editorial-cyan: #38bdf8;
-  --editorial-input: #0a0a10;
-  --editorial-media: #09090f;
-  --editorial-soft: rgba(255, 255, 255, .035);
-  --editorial-meta: rgba(255, 255, 255, .045);
-  --editorial-category: #0a0a10;
-  min-height: 68vh;
-  padding-block: clamp(48px, 7vw, 88px) clamp(68px, 9vw, 112px);
-  background: var(--editorial-page);
-  color: var(--editorial-ink);
-  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-html[data-voxa-theme="light"] .voxa-blog .site-main {
   --editorial-page: #f7f9fc;
   --editorial-surface: #ffffff;
   --editorial-surface-raised: #eef3f8;
@@ -355,12 +333,34 @@ html[data-voxa-theme="light"] .voxa-blog .site-main {
   --editorial-ink: #102033;
   --editorial-secondary: #455468;
   --editorial-muted: #65758a;
+  --editorial-electric: #126be7;
   --editorial-cyan: #075985;
   --editorial-input: #f0f4f8;
   --editorial-media: #e8eef5;
   --editorial-soft: rgba(15, 35, 58, .04);
   --editorial-meta: rgba(15, 35, 58, .06);
   --editorial-category: #edf3f8;
+  min-height: 68vh;
+  padding-block: clamp(48px, 7vw, 88px) clamp(68px, 9vw, 112px);
+  background: var(--editorial-page);
+  color: var(--editorial-ink);
+  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+html[data-voxa-theme="dark"] .voxa-blog .site-main {
+  --editorial-page: #0e0d15;
+  --editorial-surface: #15151e;
+  --editorial-surface-raised: #1f1f27;
+  --editorial-line: rgba(255, 255, 255, .1);
+  --editorial-line-hover: rgba(255, 255, 255, .25);
+  --editorial-ink: #fff;
+  --editorial-secondary: rgba(255, 255, 255, .68);
+  --editorial-muted: rgba(255, 255, 255, .46);
+  --editorial-cyan: #38bdf8;
+  --editorial-input: #0a0a10;
+  --editorial-media: #09090f;
+  --editorial-soft: rgba(255, 255, 255, .035);
+  --editorial-meta: rgba(255, 255, 255, .045);
+  --editorial-category: #0a0a10;
 }
 .voxa-blog .site-main a:hover { color: var(--editorial-cyan); }
 .voxa-blog .site-main :focus-visible { outline-color: var(--editorial-cyan); }
@@ -557,24 +557,6 @@ body.voxa-blog .featured-story h2 a:hover { color: var(--editorial-cyan); }
 
 /* Forum-only editorial system; shared blog presentation remains unchanged. */
 body.voxa-forum {
-  --forum-bg: #0e0d15;
-  --forum-panel: #15151e;
-  --forum-raised: #1b1b23;
-  --forum-line: rgba(255, 255, 255, .09);
-  --forum-line-strong: rgba(255, 255, 255, .16);
-  --forum-ink: #fff;
-  --forum-copy: rgba(255, 255, 255, .68);
-  --forum-muted: rgba(255, 255, 255, .42);
-  --forum-electric: #126be7;
-  --forum-cyan: #38bdf8;
-  --forum-input: #0a0a10;
-  --forum-soft: rgba(255, 255, 255, .035);
-  --forum-hover: rgba(255, 255, 255, .025);
-  background: var(--forum-bg);
-  color: var(--forum-ink);
-  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-html[data-voxa-theme="light"] body.voxa-forum {
   --forum-bg: #f7f9fc;
   --forum-panel: #ffffff;
   --forum-raised: #eef3f8;
@@ -583,10 +565,28 @@ html[data-voxa-theme="light"] body.voxa-forum {
   --forum-ink: #102033;
   --forum-copy: #455468;
   --forum-muted: #65758a;
+  --forum-electric: #126be7;
   --forum-cyan: #075985;
   --forum-input: #f0f4f8;
   --forum-soft: rgba(15, 35, 58, .04);
   --forum-hover: rgba(15, 35, 58, .04);
+  background: var(--forum-bg);
+  color: var(--forum-ink);
+  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+html[data-voxa-theme="dark"] body.voxa-forum {
+  --forum-bg: #0e0d15;
+  --forum-panel: #15151e;
+  --forum-raised: #1b1b23;
+  --forum-line: rgba(255, 255, 255, .09);
+  --forum-line-strong: rgba(255, 255, 255, .16);
+  --forum-ink: #fff;
+  --forum-copy: rgba(255, 255, 255, .68);
+  --forum-muted: rgba(255, 255, 255, .42);
+  --forum-cyan: #38bdf8;
+  --forum-input: #0a0a10;
+  --forum-soft: rgba(255, 255, 255, .035);
+  --forum-hover: rgba(255, 255, 255, .025);
 }
 body.voxa-forum, .voxa-forum #page, .voxa-forum .site, .voxa-forum #content { background-color: var(--forum-bg); color: var(--forum-ink); }
 .voxa-forum .site-header, .voxa-forum .site-footer { background: var(--forum-bg); border-color: var(--forum-line); }

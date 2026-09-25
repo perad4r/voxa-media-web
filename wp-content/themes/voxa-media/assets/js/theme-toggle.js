@@ -5,7 +5,7 @@
 	var validThemes = { light: true, dark: true };
 
 	function validTheme(value) {
-		return typeof value === 'string' && validThemes[value] ? value : 'dark';
+		return typeof value === 'string' && validThemes[value] ? value : 'light';
 	}
 
 	function readCookie() {
