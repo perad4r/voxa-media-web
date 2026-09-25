@@ -48,8 +48,15 @@ The `main` branch triggers `.github/workflows/deploy.yml` on the project-specifi
 2. Creates the database and uploads/plugins backups with `scripts/backup.sh`.
 3. Fast-forwards `/home/mlemingcapoo/Projects/voxa-media-web` to `origin/main` without cleaning ignored runtime files.
 4. Pulls images, updates the database/WordPress/router services, and restarts the router.
+5. Checks both sites for an active SEO plugin conflict, installs Yoast SEO Free 28.5 when needed, activates it per site, and applies the shared VOXA metadata, breadcrumbs, schema, social metadata, and sitemap defaults with WP-CLI.
 
 The runner is installed under `/home/mlemingcapoo/voxa-media-actions-runner` and managed as the `mlemingcapoo` user service `voxa-media-actions-runner.service`. Keep `.env`, Docker volumes, backups, and uploads outside Git.
+
+## SEO maintenance
+
+SEO configuration is applied by `scripts/configure-seo.sh` during every automated deployment after the services are updated. It is safe to re-run and targets Yoast SEO Free 28.5 on both `blog.voxa.vn` and `forum.voxa.vn`. The script stops if another known SEO plugin is active, so two plugins cannot emit competing titles, descriptions, canonicals, social tags, or schema.
+
+Yoast owns canonical URLs, XML sitemaps, social metadata, and its schema graph. The theme supplies Vietnamese descriptions from existing WordPress excerpts/content and renders Yoast breadcrumbs on blog posts, pages, and archives. Search results, 404 pages, design previews, empty archives, bbPress replies, and bbPress user pages remain noindex. Do not add invented SEO copy, social profiles, or default images; set post excerpts, featured images, and any page-specific SEO fields from approved VOXA content as it becomes available.
 
 ## Back up and restore
 

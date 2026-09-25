@@ -5,6 +5,7 @@ get_header();
 <main id="main-content" class="site-main blog-main article-page page-content">
 	<?php while (have_posts()) : the_post(); ?>
 		<article <?php post_class('article'); ?>>
+			<?php get_template_part('template-parts/blog-breadcrumbs'); ?>
 			<header class="article__header">
 				<p class="eyebrow">VOXA · MEDIA</p>
 				<h1><?php the_title(); ?></h1>

@@ -9,6 +9,7 @@ function voxa_media_setup() {
 	add_theme_support('responsive-embeds');
 	add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script']);
 	add_theme_support('bbpress');
+	add_theme_support('yoast-seo-breadcrumbs');
 }
 add_action('after_setup_theme', 'voxa_media_setup');
 
@@ -62,21 +63,14 @@ function voxa_media_site_url($blog_id) {
 	return $url ?: home_url('/');
 }
 
-function voxa_media_archive_canonical() {
-	if (is_singular() || is_search() || is_404()) {
-		return;
-	}
-
-	$canonical = (is_front_page() || is_home())
-		? home_url('/')
-		: get_pagenum_link(max(1, (int) get_query_var('paged')));
-
-	echo '<link rel="canonical" href="' . esc_url($canonical) . '">' . "\n";
-}
-add_action('wp_head', 'voxa_media_archive_canonical', 1);
-
 function voxa_media_noindex_internal_results($robots) {
-	if (is_search() || is_404() || voxa_media_design_preview_enabled()) {
+	$empty_archive = is_archive()
+		&& isset($GLOBALS['wp_query'])
+		&& 0 === (int) $GLOBALS['wp_query']->found_posts;
+	$private_forum_page = function_exists('bbp_is_single_reply') && bbp_is_single_reply()
+		|| function_exists('bbp_is_single_user') && bbp_is_single_user();
+
+	if (is_search() || is_404() || $empty_archive || $private_forum_page || voxa_media_design_preview_enabled()) {
 		$robots['noindex'] = true;
 	}
 	return $robots;
@@ -84,3 +78,4 @@ function voxa_media_noindex_internal_results($robots) {
 add_filter('wp_robots', 'voxa_media_noindex_internal_results');
 
 require_once get_stylesheet_directory() . '/inc/design-preview.php';
+require_once get_stylesheet_directory() . '/inc/seo.php';

@@ -229,6 +229,51 @@ html body { background-color: var(--page); }
 }
 
 /* Editorial blog treatment. The forum and shared masthead remain on the existing theme styles. */
+body.voxa-blog {
+  --blog-bg: #0e0d15;
+  --blog-panel: #15151e;
+  --blog-raised: #1b1b23;
+  --blog-line: rgba(255, 255, 255, .09);
+  --blog-line-strong: rgba(255, 255, 255, .16);
+  --blog-ink: #fff;
+  --blog-copy: rgba(255, 255, 255, .68);
+  --blog-muted: rgba(255, 255, 255, .42);
+  --blog-electric: #126be7;
+  --blog-cyan: #38bdf8;
+  background: var(--blog-bg);
+  color: var(--blog-ink);
+  font-family: "Hanken Grotesk", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body.voxa-blog .site-header, body.voxa-blog .site-footer { background: var(--blog-bg); border-color: var(--blog-line); }
+body.voxa-blog .site-header__inner, body.voxa-blog .site-footer__inner { width: min(calc(100% - 96px), 1240px); }
+body.voxa-blog .site-header { height: auto; min-height: 0; margin-block: 0; padding-block: 0 !important; }
+body.voxa-blog .site-header__inner { height: 64px; min-height: 64px; padding-block: 0; }
+body.voxa-blog .brand { width: 136px; }
+body.voxa-blog .brand__logo { max-height: 48px; }
+body.voxa-blog .primary-nav { gap: clamp(18px, 2.5vw, 34px); }
+body.voxa-blog .primary-nav__link, body.voxa-blog .primary-nav__account {
+  font-family: "JetBrains Mono", monospace;
+  font-size: .68rem;
+  font-weight: 400;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+body.voxa-blog .primary-nav__link { color: var(--blog-muted); }
+body.voxa-blog .primary-nav__link:hover, body.voxa-blog .primary-nav__link.is-current { color: var(--blog-ink); }
+body.voxa-blog .primary-nav__link.is-current { text-decoration-color: var(--blog-cyan); text-underline-offset: 8px; }
+body.voxa-blog .primary-nav__account { border-color: var(--blog-line-strong); border-radius: 0; padding: 10px 15px; color: var(--blog-ink); }
+body.voxa-blog .primary-nav__account:hover { border-color: var(--blog-electric); color: var(--blog-cyan); }
+body.voxa-blog .blog-breadcrumbs {
+  margin: 0 0 24px;
+  color: var(--blog-muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: .65rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+body.voxa-blog .blog-breadcrumbs a { color: var(--blog-copy); text-decoration: none; }
+body.voxa-blog .blog-breadcrumbs a:hover { color: var(--blog-cyan); }
+body.voxa-blog .blog-breadcrumbs .breadcrumb_last { color: var(--blog-cyan); }
 body.voxa-blog .site-header {
   height: auto;
   min-height: 0;
@@ -236,8 +281,8 @@ body.voxa-blog .site-header {
   padding-block: 0 !important;
 }
 body.voxa-blog .site-header__inner {
-  height: 72px;
-  min-height: 72px;
+  height: 64px;
+  min-height: 64px;
   padding-block: 0;
 }
 .voxa-blog .site-main {
@@ -401,7 +446,8 @@ body.voxa-blog .site-header__inner {
 .voxa-blog .site-main [hidden] { display: none !important; }
 
 @media (max-width: 900px) {
-  body.voxa-blog .site-header__inner { height: 68px; min-height: 68px; }
+  body.voxa-blog .site-header__inner { height: 62px; min-height: 62px; }
+  body.voxa-blog .site-header__inner, body.voxa-blog .site-footer__inner { width: min(calc(100% - 48px), 1240px); }
   .voxa-blog .feed-controls { align-items: flex-start; flex-direction: column; }
   .voxa-blog .editorial-search { width: 100%; max-width: none; }
   .voxa-blog .category-filters { justify-content: flex-start; }
@@ -409,6 +455,7 @@ body.voxa-blog .site-header__inner {
   .voxa-blog .featured-story__content { padding: 26px; }
 }
 @media (max-width: 700px) {
+  body.voxa-blog .site-header__inner, body.voxa-blog .site-footer__inner { width: min(calc(100% - 32px), 1240px); }
   .voxa-blog .editorial-shell, .voxa-blog .site-main.content-width { width: min(calc(100% - 32px), 1240px); }
   .voxa-blog .feed-header__title-row { align-items: flex-start; flex-direction: column; gap: 17px; }
   .voxa-blog .feed-count { align-self: flex-start; }
@@ -422,7 +469,8 @@ body.voxa-blog .site-header__inner {
   .voxa-blog .article-card .article-meta { flex-direction: column; gap: 3px; }
 }
 @media (max-width: 480px) {
-  body.voxa-blog .site-header__inner { height: auto; min-height: 64px; padding-block: 8px; }
+  body.voxa-blog .site-header__inner { height: auto; min-height: 60px; padding-block: 8px; }
+  body.voxa-blog .site-footer__inner { width: min(calc(100% - 28px), 1240px); }
   .voxa-blog .site-main { padding-block: 38px 62px; }
   .voxa-blog .editorial-shell, .voxa-blog .site-main.content-width { width: min(calc(100% - 28px), 1240px); }
   .voxa-blog .feed-header h1 { font-size: clamp(2.5rem, 13vw, 3.7rem); }

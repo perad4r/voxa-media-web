@@ -5,6 +5,7 @@ get_header();
 ?>
 <main id="main-content" class="site-main content-width blog-listing listing-page">
 	<header class="listing-heading">
+		<?php get_template_part('template-parts/blog-breadcrumbs'); ?>
 		<?php get_template_part('template-parts/section-heading', null, [
 			'eyebrow' => __('VOXA · MEDIA / LƯU TRỮ', 'voxa-media'),
 			'title' => $archive_title,

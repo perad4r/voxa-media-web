@@ -66,6 +66,8 @@ wp --url="$FORUM_URL" option update blogdescription "Cùng trao đổi và chia 
 
 wp --url="$FORUM_URL" eval-file /scripts/setup-forum-home.php
 
+sh /scripts/configure-seo.sh
+
 # Remove only the default sample post and page from a fresh WordPress install.
 wp --url="$BASE_URL" post delete 1 2 --force >/dev/null 2>&1 || true
 wp --url="$BASE_URL" rewrite flush --hard

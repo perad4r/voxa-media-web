@@ -48,3 +48,7 @@ jobs:
           docker compose up -d database wordpress router
           docker compose restart router
           docker compose ps
+
+      - name: Install and configure SEO
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: docker compose run --rm wp-cli sh /scripts/configure-seo.sh
