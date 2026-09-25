@@ -15,12 +15,20 @@ add_action('after_setup_theme', 'voxa_media_setup');
 
 function voxa_media_enqueue_styles() {
 	$css_path = get_stylesheet_directory() . '/assets/css/site.css';
+	$theme_script_path = get_stylesheet_directory() . '/assets/js/theme-toggle.js';
 	wp_enqueue_style('voxa-media-style', get_stylesheet_directory_uri() . '/assets/css/site.css', [], file_exists($css_path) ? (string) filemtime($css_path) : '1.0.0');
 	wp_enqueue_style(
 		'voxa-editorial-fonts',
 		'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap',
 		[],
 		null
+	);
+	wp_enqueue_script(
+		'voxa-media-theme',
+		get_stylesheet_directory_uri() . '/assets/js/theme-toggle.js',
+		[],
+		file_exists($theme_script_path) ? (string) filemtime($theme_script_path) : '1.0.0',
+		false
 	);
 	if (voxa_media_design_preview_enabled()) {
 		$script_path = get_stylesheet_directory() . '/assets/js/blog-design-preview.js';

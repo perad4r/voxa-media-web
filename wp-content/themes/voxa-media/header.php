@@ -26,6 +26,10 @@ $forum_url = voxa_media_site_url(2);
 			<?php else : ?>
 				<a class="primary-nav__account" href="<?php echo esc_url(wp_login_url(home_url('/'))); ?>"><?php esc_html_e('Đăng nhập', 'voxa-media'); ?></a>
 			<?php endif; ?>
+			<button class="theme-toggle" type="button" data-theme-toggle aria-pressed="true" aria-label="<?php esc_attr_e('Chuyển sang chế độ sáng', 'voxa-media'); ?>">
+				<span class="theme-toggle__icon" data-theme-icon aria-hidden="true">☀</span>
+				<span class="theme-toggle__label" data-theme-label><?php esc_html_e('SÁNG', 'voxa-media'); ?></span>
+			</button>
 		</nav>
 	</div>
 </header>
