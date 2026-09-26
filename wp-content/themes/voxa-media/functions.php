@@ -8,10 +8,27 @@ function voxa_media_setup() {
 	add_theme_support('post-thumbnails');
 	add_theme_support('responsive-embeds');
 	add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script']);
+	add_theme_support('site-icon');
 	add_theme_support('bbpress');
 	add_theme_support('yoast-seo-breadcrumbs');
 }
 add_action('after_setup_theme', 'voxa_media_setup');
+
+function voxa_media_favicon() {
+	if (function_exists('has_site_icon') && has_site_icon()) {
+		return;
+	}
+
+	$icon_path = get_stylesheet_directory() . '/assets/favicon.png';
+	if (!file_exists($icon_path)) {
+		return;
+	}
+
+	$icon_url = add_query_arg('ver', (string) filemtime($icon_path), get_stylesheet_directory_uri() . '/assets/favicon.png');
+	printf('<link rel="icon" href="%1$s" type="image/png">', esc_url($icon_url));
+	printf('<link rel="apple-touch-icon" href="%1$s">', esc_url($icon_url));
+}
+add_action('wp_head', 'voxa_media_favicon', 98);
 
 function voxa_media_enqueue_styles() {
 	$css_path = get_stylesheet_directory() . '/assets/css/site.css';
