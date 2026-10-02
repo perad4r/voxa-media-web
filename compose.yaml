@@ -111,7 +111,7 @@ services:
 
   router:
     image: nginx:1.29-alpine
-    container_name: voxa-media-router
+    container_name: ${ROUTER_CONTAINER_NAME:-voxa-media-router}
     restart: unless-stopped
     depends_on:
       - wordpress
